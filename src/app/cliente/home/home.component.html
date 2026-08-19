@@ -1,0 +1,17 @@
+<header class="home-header">
+  <p class="eyebrow">Pedidos 360</p>
+  <h1>¿Qué se te antoja hoy?</h1>
+  <p class="subtitle">Elige una tienda de la asociación para armar tu pedido</p>
+</header>
+
+<section class="tiendas-grid">
+  @for (tienda of tiendas; track tienda.id) {
+    <article class="tienda-card">
+      <span class="icono" aria-hidden="true">{{ iconos[tienda.categoria] }}</span>
+      <h2>{{ tienda.nombre }}</h2>
+      <p class="categoria">{{ tienda.categoria }}</p>
+      <p class="especialidad">{{ tienda.especialidad }}</p>
+      <button (click)="verProductos(tienda)">Ver productos</button>
+    </article>
+  }
+</section>
