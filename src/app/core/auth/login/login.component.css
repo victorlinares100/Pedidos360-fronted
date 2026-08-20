@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=Inter:wght@400;500;600&display=swap');
+
+:host {
+  --color-bg: #fff3e9;
+  --color-text: #1e1b17;
+  --color-muted: #6b6459;
+  --color-card: #ffffff;
+  --color-border: #f2e3d5;
+  --color-primary: #ff6b2c;
+  --color-primary-dark: #e0551d;
+  --color-red: #d94b3a;
+
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  font-family: 'Inter', sans-serif;
+}
+
+.login-shell {
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.login-card {
+  max-width: 380px;
+  margin: 0 auto;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 2.25rem 2rem;
+  box-shadow: 0 12px 30px rgba(30, 27, 23, 0.06);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+h1 {
+  margin: 0 0 0.35rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.subtitle {
+  margin: 0 0 1.5rem;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.campo {
+  display: block;
+  margin-bottom: 1.1rem;
+}
+
+.campo span {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.campo input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.campo input:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.error-msg {
+  color: var(--color-red);
+  font-size: 0.85rem;
+  margin: -0.4rem 0 1rem;
+}
+
+button {
+  width: 100%;
+  border: none;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 0.75rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+button:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.hint {
+  margin-top: 1.5rem;
+  padding-top: 1.1rem;
+  border-top: 1px dashed var(--color-border);
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+
+.hint p {
+  margin: 0.15rem 0;
+}

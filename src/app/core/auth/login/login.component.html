@@ -1,0 +1,47 @@
+<div class="login-shell">
+  <form class="login-card" (ngSubmit)="onSubmit()">
+    <div class="brand">
+      <span class="brand-icon">🥖</span>
+      <span class="brand-name">Pedidos 360</span>
+    </div>
+
+    <h1>Inicia sesión</h1>
+    <p class="subtitle">Accede como cliente o administrador de tu tienda</p>
+
+    <label class="campo">
+      <span>Correo</span>
+      <input
+        type="email"
+        [(ngModel)]="email"
+        name="email"
+        placeholder="tu@correo.cl"
+        required
+      />
+    </label>
+
+    <label class="campo">
+      <span>Contraseña</span>
+      <input
+        type="password"
+        [(ngModel)]="password"
+        name="password"
+        placeholder="••••"
+        required
+      />
+    </label>
+
+    @if (error()) {
+      <p class="error-msg">{{ error() }}</p>
+    }
+
+    <button type="submit" [disabled]="cargando()">
+      {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
+    </button>
+
+    <div class="hint">
+      <p>Cuentas de prueba:</p>
+      <p><strong>Cliente:</strong> cliente / 1234</p>
+      <p><strong>Admin local:</strong> admin / 1234</p>
+    </div>
+  </form>
+</div>

@@ -4,6 +4,8 @@ import { Producto } from '../../core/models/producto.model';
 import { Pedido, EstadoPedido } from '../../core/models/pedido.model';
 import { ProductoService } from '../../core/services/producto.service';
 import { PedidoService } from '../../core/services/pedido.service';
+import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-admin-local-dashboard',
@@ -29,8 +31,15 @@ export class AdminLocalDashboardComponent implements OnInit {
 
   constructor(
     private pedidoService: PedidoService,
-    private productoService: ProductoService
+    private productoService: ProductoService,
+    private authService: AuthService,
+    private router: Router
   ) {}
+
+  cerrarSesion(): void {
+  this.authService.logout();
+  this.router.navigate(['/login']);
+  }
 
   ngOnInit(): void {
     this.pedidoService.getPedidosPorTienda(this.tiendaActualId).subscribe(data => {
