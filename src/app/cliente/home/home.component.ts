@@ -1,11 +1,7 @@
-import { Component } from '@angular/core';
-
-interface Tienda {
-  id: number;
-  nombre: string;
-  categoria: 'Panadería' | 'Pastelería' | 'Cafetería';
-  especialidad: string;
-}
+import { Component, OnInit, signal, computed } from '@angular/core';
+import { Router } from '@angular/router';
+import { Tienda, CategoriaTienda } from '../../core/models/tienda.model';
+import { TiendaService } from '../../core/services/tienda.service';
 
 @Component({
   selector: 'app-home',
@@ -13,22 +9,65 @@ interface Tienda {
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
-  iconos: Record<string, string> = {
+export class HomeComponent implements OnInit {
+  iconos: Record<CategoriaTienda, string> = {
     Panadería: '🥐',
     Pastelería: '🎂',
     Cafetería: '☕'
   };
 
-  tiendas: Tienda[] = [
-    { id: 1, nombre: 'Pan Artesanal', categoria: 'Panadería', especialidad: 'Masa madre de fermentación lenta' },
-    { id: 2, nombre: 'Café Central', categoria: 'Cafetería', especialidad: 'Grano de origen, tostado propio' },
-    { id: 3, nombre: 'Dulce Rincón', categoria: 'Pastelería', especialidad: 'Tortas por encargo' },
-    { id: 4, nombre: 'Horno Real', categoria: 'Panadería', especialidad: 'Pan de campo y baguettes' }
-  ];
+  gradientes: Record<CategoriaTienda, string> = {
+    Panadería: 'linear-gradient(135deg, #FFD59E, #FF6B2C)',
+    Pastelería: 'linear-gradient(135deg, #FFB199, #E8491D)',
+    Cafetería: 'linear-gradient(135deg, #C89666, #7A4A2B)'
+  };
+
+  categorias: (CategoriaTienda | 'Todas')[] = ['Todas', 'Panadería', 'Pastelería', 'Cafetería'];
+
+  cargando = signal(true);
+  tiendas = signal<Tienda[]>([]);
+  categoriaSeleccionada = signal<CategoriaTienda | 'Todas'>('Todas');
+  busqueda = signal('');
+
+  tiendasFiltradas = computed(() => {
+    const cat = this.categoriaSeleccionada();
+    const term = this.busqueda().trim().toLowerCase();
+
+    return this.tiendas().filter(t => {
+      const coincideCategoria = cat === 'Todas' || t.categoria === cat;
+      const coincideBusqueda = !term ||
+        t.nombre.toLowerCase().includes(term) ||
+        t.especialidad.toLowerCase().includes(term);
+      return coincideCategoria && coincideBusqueda;
+    });
+  });
+
+  tiendasDestacadas = computed(() =>
+    this.tiendas().filter(t => t.destacada && t.activa)
+  );
+
+  constructor(private tiendaService: TiendaService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.tiendaService.getTiendas().subscribe(data => {
+      this.tiendas.set(data);
+      this.cargando.set(false);
+    });
+  }
+
+  seleccionarCategoria(cat: CategoriaTienda | 'Todas'): void {
+    this.categoriaSeleccionada.set(cat);
+  }
+
+  onBuscar(event: Event): void {
+    this.busqueda.set((event.target as HTMLInputElement).value);
+  }
+
+  fondoCategoria(cat: CategoriaTienda): string {
+    return this.gradientes[cat];
+  }
 
   verProductos(tienda: Tienda): void {
-    console.log('Ver productos de:', tienda.nombre);
-    // Próximo paso: navegar a /tiendas/:id usando el Router de Angular
+    this.router.navigate(['/tienda', tienda.id]);
   }
 }

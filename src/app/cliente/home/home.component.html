@@ -1,17 +1,113 @@
-<header class="home-header">
-  <p class="eyebrow">Pedidos 360</p>
-  <h1>¿Qué se te antoja hoy?</h1>
-  <p class="subtitle">Elige una tienda de la asociación para armar tu pedido</p>
-</header>
+<div class="home-shell">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon">🥖</span>
+      <span class="brand-name">Pedidos 360</span>
+    </div>
+    <button class="cart-btn" type="button" aria-label="Carrito">🛒</button>
+  </header>
 
-<section class="tiendas-grid">
-  @for (tienda of tiendas; track tienda.id) {
-    <article class="tienda-card">
-      <span class="icono" aria-hidden="true">{{ iconos[tienda.categoria] }}</span>
-      <h2>{{ tienda.nombre }}</h2>
-      <p class="categoria">{{ tienda.categoria }}</p>
-      <p class="especialidad">{{ tienda.especialidad }}</p>
-      <button (click)="verProductos(tienda)">Ver productos</button>
-    </article>
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-badge">Asociación Pedidos 360</span>
+      <h1>Pan caliente, café fresco<br />y postres a un clic</h1>
+      <p class="hero-subtitle">Pide en cualquiera de nuestras 20 tiendas asociadas y retira o recibe en tu campus</p>
+
+      <div class="hero-search">
+        <input
+          type="text"
+          placeholder="Buscar tienda o producto..."
+          (input)="onBuscar($event)"
+        />
+        <button type="button">Buscar</button>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-blob"></div>
+      <span class="hero-emoji e1">🥐</span>
+      <span class="hero-emoji e2">☕</span>
+      <span class="hero-emoji e3">🍰</span>
+      <div class="hero-tag">
+        <span class="hero-tag-top">20</span>
+        <span class="hero-tag-bottom">tiendas</span>
+      </div>
+    </div>
+  </section>
+
+  <nav class="categorias-scroll">
+    @for (cat of categorias; track cat) {
+      <button
+        class="categoria-pill"
+        [class.activo]="categoriaSeleccionada() === cat"
+        (click)="seleccionarCategoria(cat)"
+      >
+        <span class="categoria-icon">{{ cat === 'Todas' ? '🍽️' : iconos[cat] }}</span>
+        <span class="categoria-label">{{ cat }}</span>
+      </button>
+    }
+  </nav>
+
+  @if (tiendasDestacadas().length > 0) {
+    <section class="promos">
+      <h2>Ofertas destacadas</h2>
+      <div class="promos-grid">
+        @for (tienda of tiendasDestacadas(); track tienda.id) {
+          <article class="promo-card" [style.background]="fondoCategoria(tienda.categoria)">
+            <span class="promo-badge">{{ tienda.descuento }}</span>
+            <span class="promo-icon">{{ iconos[tienda.categoria] }}</span>
+            <h3>{{ tienda.nombre }}</h3>
+            <p>{{ tienda.especialidad }}</p>
+            <button (click)="verProductos(tienda)">Pedir ahora</button>
+          </article>
+        }
+      </div>
+    </section>
   }
-</section>
+
+  <section class="tiendas-section">
+    <div class="section-header">
+      <h2>Tiendas {{ categoriaSeleccionada() !== 'Todas' ? categoriaSeleccionada() : '' }}</h2>
+      <span class="resultado-count">{{ tiendasFiltradas().length }} disponibles</span>
+    </div>
+
+    @if (cargando()) {
+      <div class="tiendas-grid">
+        @for (i of [1,2,3,4,5,6]; track i) {
+          <div class="tienda-card skeleton"></div>
+        }
+      </div>
+    } @else if (tiendasFiltradas().length === 0) {
+      <div class="sin-resultados">
+        <p>No encontramos tiendas para "{{ busqueda() }}"</p>
+      </div>
+    } @else {
+      <div class="tiendas-grid">
+        @for (tienda of tiendasFiltradas(); track tienda.id) {
+          <article class="tienda-card">
+            <div class="tienda-banner" [style.background]="fondoCategoria(tienda.categoria)">
+              <span class="tienda-banner-icon">{{ iconos[tienda.categoria] }}</span>
+              @if (tienda.calificacion) {
+                <span class="rating-badge">⭐ {{ tienda.calificacion }}</span>
+              }
+              @if (!tienda.activa) {
+                <span class="estado-badge cerrado">Cerrado</span>
+              }
+            </div>
+            <div class="tienda-info">
+              <p class="categoria">{{ tienda.categoria }}</p>
+              <h3>{{ tienda.nombre }}</h3>
+              <p class="especialidad">{{ tienda.especialidad }}</p>
+              <div class="meta">
+                <span>🕐 {{ tienda.tiempoEstimado }}</span>
+              </div>
+              <button (click)="verProductos(tienda)" [disabled]="!tienda.activa">
+                Ver productos
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</div>
