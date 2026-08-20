@@ -1,0 +1,121 @@
+<div class="admin-shell">
+  <header class="admin-header">
+    <div>
+      <p class="eyebrow">Panel Admin Local</p>
+      <h1>{{ nombreTienda }}</h1>
+    </div>
+    <button class="logout-btn" type="button">Cerrar sesión</button>
+  </header>
+
+  <section class="kpis">
+    <div class="kpi-card">
+      <span class="kpi-label">Pedidos hoy</span>
+      <span class="kpi-value">{{ pedidosHoy() }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Ingresos del día</span>
+      <span class="kpi-value">${{ ingresosHoy() | number }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Productos activos</span>
+      <span class="kpi-value">{{ productosActivos() }} / {{ productos().length }}</span>
+    </div>
+    <div class="kpi-card alerta" [class.activo]="pedidosPendientes() > 0">
+      <span class="kpi-label">Pendientes</span>
+      <span class="kpi-value">{{ pedidosPendientes() }}</span>
+    </div>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab" [class.activo]="tab() === 'pedidos'" (click)="cambiarTab('pedidos')">
+      Pedidos
+    </button>
+    <button class="tab" [class.activo]="tab() === 'productos'" (click)="cambiarTab('productos')">
+      Productos
+    </button>
+  </nav>
+
+  @if (cargando()) {
+    <p class="cargando-texto">Cargando datos de la tienda...</p>
+  } @else if (tab() === 'pedidos') {
+    <section class="panel">
+      @if (pedidos().length === 0) {
+        <p class="vacio">Aún no hay pedidos para esta tienda.</p>
+      } @else {
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th>Pedido</th>
+              <th>Cliente</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Modalidad</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (pedido of pedidos(); track pedido.id) {
+              <tr>
+                <td>#{{ pedido.id }}</td>
+                <td>{{ pedido.cliente }}</td>
+                <td>{{ pedido.items.length }} producto(s)</td>
+                <td>${{ pedido.total | number }}</td>
+                <td>{{ pedido.modalidad }}</td>
+                <td>
+                  <span class="badge" [ngClass]="claseEstado(pedido.estado)">{{ pedido.estado }}</span>
+                </td>
+                <td>
+                  @if (siguienteAccion(pedido.estado); as accion) {
+                    <button class="accion-btn" (click)="avanzarPedido(pedido)">{{ accion }}</button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
+  } @else {
+    <section class="panel">
+      <div class="panel-toolbar">
+        <button class="nuevo-btn" type="button">+ Nuevo producto</button>
+      </div>
+      @if (productos().length === 0) {
+        <p class="vacio">Esta tienda aún no tiene productos cargados.</p>
+      } @else {
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Descripción</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Disponible</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (producto of productos(); track producto.id) {
+              <tr>
+                <td>{{ producto.nombre }}</td>
+                <td class="descripcion-col">{{ producto.descripcion }}</td>
+                <td>${{ producto.precio | number }}</td>
+                <td>{{ producto.stock }}</td>
+                <td>
+                  <label class="switch">
+                    <input type="checkbox" [checked]="producto.disponible" (change)="toggleDisponible(producto)" />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+                <td>
+                  <button class="editar-btn" type="button">Editar</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
+  }
+</div>
