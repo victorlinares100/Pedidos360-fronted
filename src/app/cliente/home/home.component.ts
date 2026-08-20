@@ -2,6 +2,7 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { Tienda, CategoriaTienda } from '../../core/models/tienda.model';
 import { TiendaService } from '../../core/services/tienda.service';
+import { PedidoApiService } from '../../core/services/pedido-api.service';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -48,15 +49,22 @@ export class HomeComponent implements OnInit {
     this.tiendas().filter(t => t.destacada && t.activa)
   );
 
-  constructor(private tiendaService: TiendaService, private router: Router) {}
+  constructor(private tiendaService: TiendaService, private router: Router, private pedidoApiService: PedidoApiService) {}
 
   ngOnInit(): void {
     this.tiendaService.getTiendas().subscribe(data => {
       this.tiendas.set(data);
       this.cargando.set(false);
     });
+
+    this.pedidoApiService.getPedidos().subscribe({
+      next: (data) => console.log('✅ Conectado al backend:', data),
+      error: (err) => console.error('❌ Error de conexión:', err)
+    });
+  
   }
 
+  
   seleccionarCategoria(cat: CategoriaTienda | 'Todas'): void {
     this.categoriaSeleccionada.set(cat);
   }
@@ -72,4 +80,6 @@ export class HomeComponent implements OnInit {
   verProductos(tienda: Tienda): void {
     this.router.navigate(['/tienda', tienda.id]);
   }
+
+  
 }
