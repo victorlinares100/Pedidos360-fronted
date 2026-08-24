@@ -8,6 +8,8 @@
     <h1>Inicia sesión</h1>
     <p class="subtitle">Accede como cliente o administrador de tu tienda</p>
 
+
+
     <label class="campo">
       <span>Correo</span>
       <input
@@ -36,6 +38,10 @@
 
     <button type="submit" [disabled]="cargando()">
       {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
+    </button>
+
+    <button type="button" (click)="loginConMicrosoft()" [disabled]="cargando()">
+    Iniciar sesión con Microsoft
     </button>
 
     <div class="hint">
