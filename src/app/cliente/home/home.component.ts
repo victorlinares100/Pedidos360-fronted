@@ -4,6 +4,7 @@ import { Tienda, CategoriaTienda } from '../../core/models/tienda.model';
 import { TiendaService } from '../../core/services/tienda.service';
 import { PedidoApiService } from '../../core/services/pedido-api.service';
 import { RouterLink } from '@angular/router';
+import { ProductoApiService } from '../../core/services/producto-api.service';
 
 @Component({
   imports: [RouterLink],
@@ -49,7 +50,7 @@ export class HomeComponent implements OnInit {
     this.tiendas().filter(t => t.destacada && t.activa)
   );
 
-  constructor(private tiendaService: TiendaService, private router: Router, private pedidoApiService: PedidoApiService) {}
+  constructor(private tiendaService: TiendaService, private router: Router, private pedidoApiService: PedidoApiService,  private productoApiService: ProductoApiService) {}
 
   ngOnInit(): void {
     this.tiendaService.getTiendas().subscribe(data => {
@@ -58,9 +59,14 @@ export class HomeComponent implements OnInit {
     });
 
     this.pedidoApiService.getPedidos().subscribe({
-      next: (data) => console.log('✅ Conectado al backend:', data),
-      error: (err) => console.error('❌ Error de conexión:', err)
-    });
+    next: (data) => console.log('✅ [PEDIDOS - puerto 8082]', data),
+    error: (err) => console.error('❌ [PEDIDOS - puerto 8082]', err)
+  });
+
+  this.productoApiService.getProductos().subscribe({
+    next: (data) => console.log('✅ [INVENTARIO - puerto 8081]', data),
+    error: (err) => console.error('❌ [INVENTARIO - puerto 8081]', err)
+  });
   
   }
 

@@ -6,7 +6,7 @@ import { PedidoBackend } from '../models/pedido-api.model';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoApiService {
-  private baseUrl = `${environment.apiUrl}/pedidos`;
+  private baseUrl = `${environment.apiUrlPedidos}/pedidos`;
 
   constructor(private http: HttpClient) {}
 
