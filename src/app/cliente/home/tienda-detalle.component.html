@@ -1,0 +1,43 @@
+<div class="detalle-shell">
+  <button class="volver-btn" (click)="volver()">← Volver</button>
+
+  @if (cargando()) {
+    <p class="cargando-texto">Cargando tienda...</p>
+  } @else if (!tienda()) {
+    <p class="vacio">No encontramos esta tienda.</p>
+  } @else {
+    <header class="tienda-header">
+      <span class="categoria">{{ tienda()!.categoria }}</span>
+      <h1>{{ tienda()!.nombre }}</h1>
+      <p class="especialidad">{{ tienda()!.especialidad }}</p>
+      @if (!tienda()!.activa) {
+        <span class="estado-cerrado">Cerrado en este momento</span>
+      }
+    </header>
+
+    <section class="productos-section">
+      <div class="section-header">
+        <h2>Productos</h2>
+        <span class="count">{{ totalProductos() }} disponibles</span>
+      </div>
+
+      @if (productosDeTienda().length === 0) {
+        <p class="vacio">Esta tienda aún no tiene productos cargados.</p>
+      } @else {
+        <div class="productos-grid">
+          @for (producto of productosDeTienda(); track producto.idProducto) {
+            <article class="producto-card">
+              <span class="producto-tipo">{{ producto.tipo }}</span>
+              <h3>{{ producto.nombre }}</h3>
+              <p class="producto-marca">{{ producto.marca }}</p>
+              <div class="producto-footer">
+                <span class="precio">${{ producto.precio | number }}</span>
+                <button type="button">Agregar</button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  }
+</div>

@@ -17,5 +17,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./admin/admin-local/admin-local.component').then(m => m.AdminLocalDashboardComponent),
     canActivate: [rolGuard(['admin_local'])]
+  },
+
+  {
+  path: 'tienda/:id',
+  loadComponent: () =>
+    import('./cliente/home/tienda-detalle.component').then(m => m.TiendaDetalleComponent)
   }
+
 ];
