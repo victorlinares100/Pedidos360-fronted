@@ -4,10 +4,46 @@ import { delay } from 'rxjs/operators';
 import { Producto } from '../models/producto.model';
 
 const PRODUCTOS_MOCK: Producto[] = [
-  { id: 101, tiendaId: 1, nombre: 'Baguette tradicional', descripcion: 'Pan francés crocante', precio: 1800, stock: 24, disponible: true },
-  { id: 102, tiendaId: 1, nombre: 'Pan de masa madre', descripcion: 'Fermentación de 24h', precio: 3200, stock: 12, disponible: true },
-  { id: 103, tiendaId: 1, nombre: 'Croissant mantequilla', descripcion: 'Hojaldre artesanal', precio: 1500, stock: 0, disponible: false },
-  { id: 104, tiendaId: 1, nombre: 'Focaccia romero', descripcion: 'Con aceite de oliva', precio: 4500, stock: 8, disponible: true },
+  { 
+    id: 101, 
+    tiendaId: 1, 
+    nombre: 'Baguette tradicional', 
+    descripcion: 'Pan francés crocante', 
+    precio: 1800, 
+    stock: 24, 
+    disponible: true,
+    imagenUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&q=80'
+  },
+  { 
+    id: 102, 
+    tiendaId: 1, 
+    nombre: 'Pan de masa madre', 
+    descripcion: 'Fermentación de 24h', 
+    precio: 3200, 
+    stock: 12, 
+    disponible: true,
+    imagenUrl: 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=500&q=80'
+  },
+  { 
+    id: 103, 
+    tiendaId: 1, 
+    nombre: 'Croissant mantequilla', 
+    descripcion: 'Hojaldre artesanal', 
+    precio: 1500, 
+    stock: 0, 
+    disponible: false,
+    imagenUrl: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=500&q=80'
+  },
+  { 
+    id: 104, 
+    tiendaId: 1, 
+    nombre: 'Focaccia romero', 
+    descripcion: 'Con aceite de oliva', 
+    precio: 4500, 
+    stock: 8, 
+    disponible: true,
+    imagenUrl: 'https://images.unsplash.com/photo-1579697096985-41fe1430e5df?w=500&q=80'
+  },
 ];
 
 @Injectable({ providedIn: 'root' })

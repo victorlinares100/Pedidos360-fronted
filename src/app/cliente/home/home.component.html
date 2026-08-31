@@ -12,7 +12,7 @@
     <div class="hero-content">
       <span class="hero-badge">Asociación Pedidos 360</span>
       <h1>Pan caliente, café fresco<br />y postres a un clic</h1>
-      <p class="hero-subtitle">Pide en cualquiera de nuestras 20 tiendas asociadas y retira o recibe en tu campus</p>
+      <p class="hero-subtitle">Pide en cualquiera de nuestras tiendas asociadas y retira o recibe en tu campus</p>
 
       <div class="hero-search">
         <input
@@ -30,7 +30,7 @@
       <span class="hero-emoji e2">☕</span>
       <span class="hero-emoji e3">🍰</span>
       <div class="hero-tag">
-        <span class="hero-tag-top">20</span>
+        <span class="hero-tag-top">{{ tiendas().length }}</span>
         <span class="hero-tag-bottom">tiendas</span>
       </div>
     </div>
@@ -53,12 +53,16 @@
     <section class="promos">
       <h2>Ofertas destacadas</h2>
       <div class="promos-grid">
-        @for (tienda of tiendasDestacadas(); track tienda.id) {
-          <article class="promo-card" [style.background]="fondoCategoria(tienda.categoria)">
-            <span class="promo-badge">{{ tienda.descuento }}</span>
-            <span class="promo-icon">{{ iconos[tienda.categoria] }}</span>
-            <h3>{{ tienda.nombre }}</h3>
-            <p>{{ tienda.especialidad }}</p>
+        @for (tienda of tiendasDestacadas(); track getId(tienda)) {
+          <article class="promo-card" [style.background]="fondoCategoria(getCategoria(tienda))">
+            <span class="promo-badge">{{ tienda.descuento || 'Destacado' }}</span>
+            @if (tienda.logoUrl) {
+              <img [src]="tienda.logoUrl" [alt]="getNombre(tienda)" class="promo-img" />
+            } @else {
+              <span class="promo-icon">{{ iconos[getCategoria(tienda)] }}</span>
+            }
+            <h3>{{ getNombre(tienda) }}</h3>
+            <p>{{ getEspecialidad(tienda) }}</p>
             <button (click)="verProductos(tienda)">Pedir ahora</button>
           </article>
         }
@@ -84,25 +88,40 @@
       </div>
     } @else {
       <div class="tiendas-grid">
-        @for (tienda of tiendasFiltradas(); track tienda.id) {
+        @for (tienda of tiendasFiltradas(); track getId(tienda)) {
           <article class="tienda-card">
-            <div class="tienda-banner" [style.background]="fondoCategoria(tienda.categoria)">
-              <span class="tienda-banner-icon">{{ iconos[tienda.categoria] }}</span>
+            <!-- Banner superior con la foto -->
+            <div class="tienda-banner">
+              @if (tienda.logoUrl) {
+                <img [src]="tienda.logoUrl" [alt]="getNombre(tienda)" class="tienda-img" />
+              } @else {
+                <span class="tienda-banner-icon">{{ iconos[getCategoria(tienda)] }}</span>
+              }
+              
               @if (tienda.calificacion) {
                 <span class="rating-badge">⭐ {{ tienda.calificacion }}</span>
               }
-              @if (!tienda.activa) {
+              @if (tienda.activa === false) {
                 <span class="estado-badge cerrado">Cerrado</span>
               }
             </div>
+
+            <!-- Información visible de la tienda -->
             <div class="tienda-info">
-              <p class="categoria">{{ tienda.categoria }}</p>
-              <h3>{{ tienda.nombre }}</h3>
-              <p class="especialidad">{{ tienda.especialidad }}</p>
-              <div class="meta">
-                <span>🕐 {{ tienda.tiempoEstimado }}</span>
+              <span class="categoria-tag">{{ getCategoria(tienda) }}</span>
+              <h3 class="tienda-titulo">{{ getNombre(tienda) }}</h3>
+              <p class="especialidad-text">{{ getEspecialidad(tienda) }}</p>
+              
+              <div class="meta-row">
+                <span class="tiempo-tag">🕐 {{ getTiempo(tienda) }}</span>
               </div>
-              <button (click)="verProductos(tienda)" [disabled]="!tienda.activa">
+
+              <button 
+                type="button"
+                class="btn-ver-productos" 
+                (click)="verProductos(tienda)" 
+                [disabled]="tienda.activa === false"
+              >
                 Ver productos
               </button>
             </div>
