@@ -17,7 +17,11 @@ const CREDENCIALES_MOCK: Credencial[] = [
   {
     email: 'admin', password: '1234',
     usuario: { id: 2, nombre: 'Dueño Pan Artesanal', email: 'admin', rol: 'admin_local', tiendaId: 1 }
-  }
+  },
+  {
+  email: 'general@pedidos360.cl', password: '1234',
+  usuario: { id: 3, nombre: 'Directiva Pedidos 360', email: 'general@pedidos360.cl', rol: 'admin_general' }
+},
 ];
 
 const STORAGE_KEY = 'pedidos360_usuario';

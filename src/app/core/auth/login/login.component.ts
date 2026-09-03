@@ -39,8 +39,19 @@ export class LoginComponent {
       } else {
         this.router.navigate(['/']);
       }
+
+      if (usuario.rol === 'admin_local') {
+        this.router.navigate(['/admin-local']);
+      } else if (usuario.rol === 'admin_general') {
+        this.router.navigate(['/admin-general']);
+        } else {
+          
+  this.router.navigate(['/']);
+}
     });
   }
+
+  
 
   // Login nuevo con Microsoft
   loginConMicrosoft(): void {

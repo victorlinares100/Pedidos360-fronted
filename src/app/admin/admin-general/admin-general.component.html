@@ -1,0 +1,74 @@
+<div class="admin-shell">
+  <header class="admin-header">
+    <div>
+      <p class="eyebrow">Panel Admin General</p>
+      <h1>Operaciones · Asociación Pedidos 360</h1>
+    </div>
+    <button class="logout-btn" type="button" (click)="cerrarSesion()">Cerrar sesión</button>
+  </header>
+
+  @if (cargando()) {
+    <p class="cargando-texto">Cargando métricas...</p>
+  } @else {
+    <section class="kpis">
+      <div class="kpi-card destacada">
+        <span class="kpi-label">Ventas totales hoy</span>
+        <span class="kpi-value">${{ totalVentas() | number }}</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Pedidos totales hoy</span>
+        <span class="kpi-value">{{ totalPedidos() }}</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Ticket promedio</span>
+        <span class="kpi-value">${{ ticketPromedioGeneral() | number }}</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Tiendas activas</span>
+        <span class="kpi-value">{{ metricas().length }} / 20</span>
+      </div>
+    </section>
+
+    <div class="dashboard-grid">
+      <section class="panel ranking-panel">
+        <h2>Rendimiento por tienda</h2>
+        <div class="ranking-list">
+          @for (tienda of tiendasOrdenadas(); track tienda.tiendaId; let i = $index) {
+            <div class="ranking-item">
+              <span class="ranking-pos">#{{ i + 1 }}</span>
+              <div class="ranking-info">
+                <div class="ranking-top">
+                  <span class="ranking-nombre">{{ tienda.nombre }}</span>
+                  <span class="ranking-valor">${{ tienda.ventasHoy | number }}</span>
+                </div>
+                <div class="ranking-bar-track">
+                  <div class="ranking-bar-fill" [style.width.%]="porcentajeBarra(tienda.ventasHoy)"></div>
+                </div>
+                <div class="ranking-meta">
+                  <span>{{ tienda.categoria }}</span>
+                  <span>{{ tienda.pedidosHoy }} pedidos</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+      <section class="panel top-panel">
+        <h2>Productos más pedidos</h2>
+        <div class="top-list">
+          @for (producto of productosTop(); track producto.nombre; let i = $index) {
+            <div class="top-item">
+              <span class="top-pos">{{ i + 1 }}</span>
+              <div class="top-info">
+                <span class="top-nombre">{{ producto.nombre }}</span>
+                <span class="top-tienda">{{ producto.tiendaNombre }}</span>
+              </div>
+              <span class="top-cantidad">{{ producto.cantidadVendida }}</span>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  }
+</div>

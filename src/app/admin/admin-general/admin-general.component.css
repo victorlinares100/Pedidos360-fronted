@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+:host {
+  --color-bg: #f7f7f8;
+  --color-text: #1e1b17;
+  --color-muted: #6b6459;
+  --color-card: #ffffff;
+  --color-border: #e7e4de;
+  --color-primary: #ff6b2c;
+  --color-primary-dark: #e0551d;
+
+  display: block;
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', sans-serif;
+}
+
+.admin-shell {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3.5rem;
+}
+
+.admin-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+h1 {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.logout-btn {
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  padding: 0.55rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.cargando-texto {
+  text-align: center;
+  color: var(--color-muted);
+  padding: 3rem 0;
+}
+
+/* KPIs */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.kpi-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.kpi-card.destacada {
+  background: linear-gradient(135deg, #ff6b2c, #e0551d);
+  border: none;
+}
+
+.kpi-card.destacada .kpi-label,
+.kpi-card.destacada .kpi-value {
+  color: #fff;
+}
+
+.kpi-label {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  font-weight: 500;
+}
+
+.kpi-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Grid principal */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 1.25rem;
+}
+
+@media (max-width: 860px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1.25rem;
+}
+
+.panel h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.05rem;
+  margin: 0 0 1.1rem;
+}
+
+/* Ranking de tiendas */
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.ranking-pos {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  width: 28px;
+  flex-shrink: 0;
+  padding-top: 0.1rem;
+}
+
+.ranking-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ranking-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+}
+
+.ranking-nombre {
+  font-weight: 600;
+}
+
+.ranking-valor {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.ranking-bar-track {
+  height: 6px;
+  background: var(--color-border);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 0.35rem;
+}
+
+.ranking-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b2c, #ffa26b);
+  border-radius: 999px;
+}
+
+.ranking-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  color: var(--color-muted);
+}
+
+/* Top productos */
+.top-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.top-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.top-pos {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #fff1e6;
+  color: var(--color-primary-dark);
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.top-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-nombre {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.top-tienda {
+  font-size: 0.76rem;
+  color: var(--color-muted);
+}
+
+.top-cantidad {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-primary-dark);
+  flex-shrink: 0;
+}

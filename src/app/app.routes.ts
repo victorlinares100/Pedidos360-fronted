@@ -23,6 +23,13 @@ export const routes: Routes = [
   path: 'tienda/:id',
   loadComponent: () =>
     import('./cliente/home/tienda-detalle.component').then(m => m.TiendaDetalleComponent)
+  },
+
+  {
+  path: 'admin-general',
+  loadComponent: () =>
+    import('./admin/admin-general/admin-general.component').then(m => m.AdminGeneralComponent),
+  canActivate: [rolGuard(['admin_general'])]
   }
 
 ];
