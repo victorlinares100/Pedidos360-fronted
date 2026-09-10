@@ -1,0 +1,124 @@
+.kds-container {
+  padding: 20px;
+  background-color: #1e1e2e;
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+.kds-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #313244;
+  padding-bottom: 10px;
+}
+
+.btn-refresh {
+  background-color: #45475a;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.kds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.kds-card {
+  background-color: #313244;
+  border-radius: 10px;
+  padding: 16px;
+  border-top: 6px solid #89b4fa;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.kds-card.estado-pendiente {
+  border-top-color: #f9e2af;
+}
+
+.kds-card.estado-preparacion {
+  border-top-color: #89b4fa;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.pedido-timer {
+  color: #f38ba8;
+}
+
+.badge-modalidad {
+  background: #45475a;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.badge-estado {
+  font-weight: bold;
+}
+
+.card-items ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.card-items li {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.item-cantidad {
+  font-weight: bold;
+  color: #a6e3a1;
+  margin-right: 8px;
+}
+
+.card-actions {
+  margin-top: 15px;
+}
+
+.btn-accion {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-accion:hover {
+  opacity: 0.9;
+}
+
+.btn-iniciar {
+  background-color: #f9e2af;
+  color: #11111b;
+}
+
+.btn-listo {
+  background-color: #a6e3a1;
+  color: #11111b;
+}
+
+.kds-empty, .kds-loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2rem;
+  color: #bac2de;
+}

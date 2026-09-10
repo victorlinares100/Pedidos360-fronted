@@ -30,6 +30,12 @@ export const routes: Routes = [
   loadComponent: () =>
     import('./admin/admin-general/admin-general.component').then(m => m.AdminGeneralComponent),
   canActivate: [rolGuard(['admin_general'])]
+  },
+  
+  {
+    path: 'cocina',
+    loadComponent: () => import('./cocina/cocina.component').then(m => m.CocinaComponent),
+    canActivate: [rolGuard],
+    data: { roles: ['cocina', 'admin_local', 'admin_general'] }
   }
-
 ];

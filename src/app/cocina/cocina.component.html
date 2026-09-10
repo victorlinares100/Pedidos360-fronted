@@ -1,0 +1,63 @@
+<div class="kds-container">
+  <header class="kds-header">
+    <h2> Pantalla de Cocina (KDS)</h2>
+    <button class="btn-refresh" (click)="cargarPedidos()"> Actualizar</button>
+  </header>
+
+  <div *ngIf="cargando" class="kds-loading">
+    Cargando comandas de cocina...
+  </div>
+
+  <div *ngIf="!cargando && pedidos.length === 0" class="kds-empty">
+    <p>No hay pedidos pendientes en este momento.</p>
+  </div>
+
+  <div *ngIf="!cargando && pedidos.length > 0" class="kds-grid">
+    <div 
+      *ngFor="let pedido of pedidos" 
+      class="kds-card" 
+      [ngClass]="{'estado-pendiente': pedido.estado === 'Pendiente', 'estado-preparacion': pedido.estado === 'En preparación'}"
+    >
+      <div class="card-header">
+        <span class="pedido-id">#{{ pedido.id }}</span>
+        <span class="pedido-timer"> {{ obtenerMinutosTranscurridos(pedido.creadoEn) }} min</span>
+      </div>
+
+      <div class="card-info">
+        <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
+        <p><strong>Tipo:</strong> <span class="badge-modalidad">{{ pedido.modalidad }}</span></p>
+        <p><strong>Estado:</strong> <span class="badge-estado">{{ pedido.estado }}</span></p>
+      </div>
+
+      <hr />
+
+      <div class="card-items">
+        <h4> Detalle Comanda:</h4>
+        <ul>
+          <li *ngFor="let item of pedido.items">
+            <span class="item-cantidad">{{ item.cantidad }}x</span>
+            <span class="item-nombre">{{ item.nombre }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card-actions">
+        <button 
+          *ngIf="pedido.estado === 'Pendiente'" 
+          class="btn-accion btn-iniciar" 
+          (click)="cambiarEstado(pedido.id)"
+        >
+           Iniciar Preparación
+        </button>
+
+        <button 
+          *ngIf="pedido.estado === 'En preparación'" 
+          class="btn-accion btn-listo" 
+          (click)="cambiarEstado(pedido.id)"
+        >
+           Marcar como Listo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
