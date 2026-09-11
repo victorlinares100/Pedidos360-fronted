@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { MsalService } from '@azure/msal-angular';
 
+
+const SCOPE_BACKEND = 'api://8f72ba0f-8036-40e2-9465-c8ae3891444d/access_as_user';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -55,27 +58,11 @@ export class LoginComponent {
 
   // Login nuevo con Microsoft
   loginConMicrosoft(): void {
-    this.error.set('');
-    this.cargando.set(true);
+  this.error.set('');
+  this.msalService.loginRedirect({
+    scopes: [SCOPE_BACKEND]
+  });
 
-    this.msalService.loginPopup().subscribe({
-      next: (result) => {
-        this.cargando.set(false);
-        const cuenta = result.account;
-        console.log('Cuenta de Microsoft:', cuenta);
-
-        // TODO: aquí decides qué hacer con esa cuenta.
-        // Opción A: mandarla a tu backend para crear/vincular el usuario y obtener su rol real
-        // this.authService.loginConMicrosoft(cuenta).subscribe(usuario => { ... navegar según rol ... });
-
-        // Opción B (temporal, sin validar contra tu backend):
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        this.cargando.set(false);
-        this.error.set('No se pudo iniciar sesión con Microsoft');
-        console.error(err);
-      }
-    });
+  
   }
 }

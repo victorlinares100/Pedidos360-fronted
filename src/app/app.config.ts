@@ -1,16 +1,23 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { routes } from './app.routes';
 import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
 import {
   MSAL_INSTANCE,
   MSAL_GUARD_CONFIG,
+  MSAL_INTERCEPTOR_CONFIG,
   MsalService,
   MsalGuard,
+  MsalInterceptor,
   MsalBroadcastService,
-  MsalGuardConfiguration
+  MsalGuardConfiguration,
+  MsalInterceptorConfiguration
 } from '@azure/msal-angular';
+
+// 👇 Reemplaza SOLO la parte final por el nombre real de tu scope
+// (lo copias completo desde "Expose an API" en Azure)
+const SCOPE_BACKEND = 'api://8f72ba0f-8036-40e2-9465-c8ae3891444d/access_as_user';
 
 export function MSALInstanceFactory(): PublicClientApplication {
   return new PublicClientApplication({
@@ -23,23 +30,40 @@ export function MSALInstanceFactory(): PublicClientApplication {
 }
 
 export function MSALGuardConfigFactory(): MsalGuardConfiguration {
-  return { interactionType: InteractionType.Redirect };
+  return {
+    interactionType: InteractionType.Redirect,
+    authRequest: {
+      scopes: [SCOPE_BACKEND]
+    }
+  };
+}
+
+export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+  const protectedResourceMap = new Map<string, Array<string>>();
+  // Ajusta el host/puerto al de tu backend real (¿inventario y pedidos corren en puertos distintos?)
+  protectedResourceMap.set('http://localhost:8080/*', [SCOPE_BACKEND]);
+
+  return {
+    interactionType: InteractionType.Redirect,
+    protectedResourceMap
+  };
 }
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptorsFromDi()), // 👈 necesario para que MsalInterceptor funcione
     {
-      provide: MSAL_INSTANCE,
-      useFactory: MSALInstanceFactory
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true
     },
-    {
-      provide: MSAL_GUARD_CONFIG,
-      useFactory: MSALGuardConfigFactory
-    },
+    { provide: MSAL_INSTANCE, useFactory: MSALInstanceFactory },
+    { provide: MSAL_GUARD_CONFIG, useFactory: MSALGuardConfigFactory },
+    { provide: MSAL_INTERCEPTOR_CONFIG, useFactory: MSALInterceptorConfigFactory },
     MsalService,
     MsalGuard,
+    MsalInterceptor,
     MsalBroadcastService
   ]
 };
