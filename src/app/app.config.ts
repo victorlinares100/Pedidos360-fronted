@@ -40,8 +40,8 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
 
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string>>();
-  // Ajusta el host/puerto al de tu backend real (¿inventario y pedidos corren en puertos distintos?)
-  protectedResourceMap.set('http://localhost:8080/*', [SCOPE_BACKEND]);
+  protectedResourceMap.set('http://localhost:8081/*', [SCOPE_BACKEND]); // inventario
+  protectedResourceMap.set('http://localhost:8082/*', [SCOPE_BACKEND]); // pedidos
 
   return {
     interactionType: InteractionType.Redirect,
