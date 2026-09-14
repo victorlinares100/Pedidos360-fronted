@@ -18,30 +18,27 @@ export const routes: Routes = [
       import('./admin/admin-local/admin-local.component').then(m => m.AdminLocalDashboardComponent),
     canActivate: [rolGuard(['admin_local'])]
   },
-
   {
-  path: 'tienda/:id',
-  loadComponent: () =>
-    import('./cliente/home/tienda-detalle.component').then(m => m.TiendaDetalleComponent)
+    path: 'tienda/:id',
+    loadComponent: () =>
+      import('./cliente/home/tienda-detalle.component').then(m => m.TiendaDetalleComponent)
   },
-
   {
-  path: 'admin-general',
-  loadComponent: () =>
-    import('./admin/admin-general/admin-general.component').then(m => m.AdminGeneralComponent),
-  canActivate: [rolGuard(['admin_general'])]
+    path: 'admin-general',
+    loadComponent: () =>
+      import('./admin/admin-general/admin-general.component').then(m => m.AdminGeneralComponent),
+    canActivate: [rolGuard(['admin_general'])]
   },
-  
   {
     path: 'cocina',
-    loadComponent: () => import('./cocina/cocina.component').then(m => m.CocinaComponent),
-    canActivate: [rolGuard],
-    data: { roles: ['cocina', 'admin_local', 'admin_general'] }
+    loadComponent: () => 
+      import('./cocina/cocina.component').then(m => m.CocinaComponent),
+    canActivate: [rolGuard(['cocina', 'admin_local', 'admin_general'])]
   },
   {
     path: 'repartidor',
-    loadComponent: () => import('./repartidor/repartidor.component').then(m => m.RepartidorComponent),
-    canActivate: [rolGuard],
-    data: { roles: ['repartidor', 'admin_local', 'admin_general'] }
+    loadComponent: () => 
+      import('./repartidor/repartidor.component').then(m => m.RepartidorComponent),
+    canActivate: [rolGuard(['repartidor', 'admin_local', 'admin_general'])]
   }
 ];
