@@ -19,12 +19,16 @@ const CREDENCIALES_MOCK: Credencial[] = [
     usuario: { id: 2, nombre: 'Dueño Pan Artesanal', email: 'admin', rol: 'admin_local', tiendaId: 1 }
   },
   {
-  email: 'general@pedidos360.cl', password: '1234',
+  email: 'general', password: '1234',
   usuario: { id: 3, nombre: 'Directiva Pedidos 360', email: 'general@pedidos360.cl', rol: 'admin_general' }
   },
   {
-  email: 'cocina@pedidos360.cl', password: '1234',
+  email: 'cocina', password: '1234',
   usuario: { id: 4, nombre: 'Jefe de Cocina - Local 1', email: 'cocina@pedidos360.cl', rol: 'cocina', tiendaId: 1 }
+  },
+  {
+  email: 'repartidor',password: '1234',
+  usuario: {  id: 5,  nombre: 'Carlos Delivery',  email: 'repartidor@pedidos360.cl',  rol: 'repartidor',  tiendaId: 1}
   }
 ];
 

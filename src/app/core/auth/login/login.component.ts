@@ -21,7 +21,6 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  // Tu login normal, sin cambios
   onSubmit(): void {
     this.error.set('');
     this.cargando.set(true);
@@ -34,26 +33,29 @@ export class LoginComponent {
         return;
       }
 
-      if (usuario.rol === 'admin_local') {
-        this.router.navigate(['/admin-local']);
-      } else {
-        this.router.navigate(['/']);
+      // Redirección según el rol del usuario autenticado
+      switch (usuario.rol) {
+        case 'admin_local':
+          this.router.navigate(['/admin-local']);
+          break;
+        case 'admin_general':
+          this.router.navigate(['/admin-general']);
+          break;
+        case 'cocina':
+          this.router.navigate(['/cocina']);
+          break;
+        case 'repartidor':
+          this.router.navigate(['/repartidor']);
+          break;
+        case 'cliente':
+        default:
+          this.router.navigate(['/']);
+          break;
       }
-
-      if (usuario.rol === 'admin_local') {
-        this.router.navigate(['/admin-local']);
-      } else if (usuario.rol === 'admin_general') {
-        this.router.navigate(['/admin-general']);
-        } else {
-          
-  this.router.navigate(['/']);
-}
     });
   }
 
-  
-
-  // Login nuevo con Microsoft
+  // Login con Microsoft (Azure AD)
   loginConMicrosoft(): void {
     this.error.set('');
     this.cargando.set(true);
@@ -64,11 +66,7 @@ export class LoginComponent {
         const cuenta = result.account;
         console.log('Cuenta de Microsoft:', cuenta);
 
-        // TODO: aquí decides qué hacer con esa cuenta.
-        // Opción A: mandarla a tu backend para crear/vincular el usuario y obtener su rol real
-        // this.authService.loginConMicrosoft(cuenta).subscribe(usuario => { ... navegar según rol ... });
-
-        // Opción B (temporal, sin validar contra tu backend):
+        // TODO: Vincular el token JWT devuelto por Azure AD para navegar según el rol retornado
         this.router.navigate(['/']);
       },
       error: (err) => {

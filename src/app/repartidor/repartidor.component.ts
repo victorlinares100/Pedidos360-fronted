@@ -5,38 +5,41 @@ import { AuthService } from '../core/services/auth.service';
 import { Pedido } from '../core/models/pedido.model';
 
 @Component({
-  selector: 'app-cocina',
+  selector: 'app-repartidor',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './cocina.component.html',
-  styleUrl: './cocina.component.css'
+  templateUrl: './repartidor.component.html',
+  styleUrl: './repartidor.component.css'
 })
-export class CocinaComponent implements OnInit {
+export class RepartidorComponent implements OnInit {
   private pedidoService = inject(PedidoService);
   private authService = inject(AuthService);
 
   pedidos: Pedido[] = [];
   cargando = true;
 
-  get pendientesCount(): number {
-    return this.pedidos.filter(p => p.estado === 'Pendiente').length;
+  get porEntregarCount(): number {
+    return this.pedidos.filter(p => p.estado === 'Listo').length;
   }
 
-  get enPreparacionCount(): number {
-    return this.pedidos.filter(p => p.estado === 'En preparación').length;
+  get entregadosCount(): number {
+    return this.pedidos.filter(p => p.estado === 'Entregado').length;
   }
 
   ngOnInit(): void {
-    this.cargarPedidos();
+    this.cargarDespachos();
   }
 
-  cargarPedidos(): void {
+  cargarDespachos(): void {
     const usuario = this.authService.usuarioActual();
     const tiendaId = usuario?.tiendaId ?? 1;
 
     this.pedidoService.getPedidosPorTienda(tiendaId).subscribe({
       next: (data) => {
-        this.pedidos = data.filter(p => p.estado === 'Pendiente' || p.estado === 'En preparación');
+        // En repartidor filtramos solo despachos a domicilio que estén Listos o Entregados
+        this.pedidos = data.filter(
+          p => p.modalidad === 'Entrega a domicilio' && (p.estado === 'Listo' || p.estado === 'Entregado')
+        );
         this.cargando = false;
       },
       error: () => {
@@ -45,10 +48,10 @@ export class CocinaComponent implements OnInit {
     });
   }
 
-  cambiarEstado(pedidoId: number): void {
+  marcarEntregado(pedidoId: number): void {
     const pedidoActualizado = this.pedidoService.avanzarEstado(pedidoId);
     if (pedidoActualizado) {
-      this.cargarPedidos();
+      this.cargarDespachos();
     }
   }
 

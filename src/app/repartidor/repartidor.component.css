@@ -16,13 +16,13 @@
   font-family: 'Inter', sans-serif;
 }
 
-.cocina-shell {
+.repartidor-shell {
   max-width: 1100px;
   margin: 0 auto;
   padding: 2rem 1.5rem 3.5rem;
 }
 
-.cocina-header {
+.repartidor-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -102,23 +102,23 @@ h1 {
   color: var(--color-primary-dark);
 }
 
-.kpi-card.en-proceso.activo {
-  border-color: #1e4fa3;
-  background: #f0f5ff;
+.kpi-card.completados {
+  border-color: #227a3c;
+  background: #f0fdf4;
 }
 
-.kpi-card.en-proceso.activo .kpi-value {
-  color: #1e4fa3;
+.kpi-card.completados .kpi-value {
+  color: #227a3c;
 }
 
-/* Grilla de comandas */
-.comandas-grid {
+/* Grilla de Despachos */
+.despachos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.25rem;
 }
 
-.comanda-card {
+.despacho-card {
   background: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: 16px;
@@ -130,17 +130,18 @@ h1 {
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.comanda-card:hover {
+.despacho-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(45, 34, 30, 0.08);
 }
 
-.comanda-card.borde-pendiente {
-  border-top: 5px solid #e6a100;
+.despacho-card.borde-listo {
+  border-top: 5px solid #ff6b2c;
 }
 
-.comanda-card.borde-preparacion {
-  border-top: 5px solid #1e4fa3;
+.despacho-card.borde-entregado {
+  border-top: 5px solid #227a3c;
+  opacity: 0.85;
 }
 
 .card-top {
@@ -166,18 +167,13 @@ h1 {
   color: var(--color-muted);
 }
 
-.timer-tag.urgente {
-  background: #fbdad6;
-  color: #b8362a;
-}
-
 .card-meta {
   margin-bottom: 1rem;
 }
 
 .cliente-nombre {
   margin: 0 0 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--color-text);
 }
 
@@ -190,8 +186,8 @@ h1 {
 
 .badge-modalidad {
   font-size: 0.75rem;
-  background: #f2e3d5;
-  color: #52423a;
+  background: #fff0e8;
+  color: var(--color-primary-dark);
   padding: 0.2rem 0.6rem;
   border-radius: 6px;
   font-weight: 600;
@@ -205,10 +201,10 @@ h1 {
   font-weight: 600;
 }
 
-.estado-pendiente { background: #fff1cc; color: #8a6300; }
-.estado-preparacion { background: #dbe8ff; color: #1e4fa3; }
+.estado-listo { background: #e3d9ff; color: #5a30b8; }
+.estado-entregado { background: #d9f2df; color: #227a3c; }
 
-/* Detalle de productos */
+/* Detalle de Productos y Precio */
 .items-seccion {
   border-top: 1px solid var(--color-border);
   padding-top: 0.85rem;
@@ -228,12 +224,12 @@ h1 {
 .items-lista {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 0.85rem 0;
 }
 
 .items-lista li {
-  font-size: 0.92rem;
-  padding: 0.25rem 0;
+  font-size: 0.9rem;
+  padding: 0.2rem 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -248,7 +244,24 @@ h1 {
   color: var(--color-text);
 }
 
-/* Botones de acción */
+.total-monto {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fdfbf7;
+  border: 1px dashed var(--color-border);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.total-monto strong {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.05rem;
+  color: var(--color-text);
+}
+
+/* Botones y Footer */
 .card-footer {
   margin-top: auto;
 }
@@ -268,22 +281,23 @@ h1 {
   transform: translateY(-1px);
 }
 
-.btn-iniciar {
-  background: var(--color-primary);
-  color: #ffffff;
-}
-
-.btn-iniciar:hover {
-  background: var(--color-primary-dark);
-}
-
-.btn-listo {
+.btn-entregar {
   background: #227a3c;
   color: #ffffff;
 }
 
-.btn-listo:hover {
+.btn-entregar:hover {
   background: #1b6330;
+}
+
+.completado-badge {
+  text-align: center;
+  padding: 0.55rem;
+  background: #f0fdf4;
+  color: #227a3c;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
 .vacio-panel {

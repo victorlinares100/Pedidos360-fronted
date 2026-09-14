@@ -1,63 +1,96 @@
-<div class="kds-container">
-  <header class="kds-header">
-    <h2> Pantalla de Cocina (KDS)</h2>
-    <button class="btn-refresh" (click)="cargarPedidos()"> Actualizar</button>
+<div class="cocina-shell">
+  <header class="cocina-header">
+    <div>
+      <p class="eyebrow">Gestión Operativa</p>
+      <h1>Pantalla de Cocina (KDS)</h1>
+    </div>
+    <button class="refrescar-btn" type="button" (click)="cargarPedidos()">
+      ↻ Actualizar comandas
+    </button>
   </header>
 
-  <div *ngIf="cargando" class="kds-loading">
-    Cargando comandas de cocina...
-  </div>
-
-  <div *ngIf="!cargando && pedidos.length === 0" class="kds-empty">
-    <p>No hay pedidos pendientes en este momento.</p>
-  </div>
-
-  <div *ngIf="!cargando && pedidos.length > 0" class="kds-grid">
-    <div 
-      *ngFor="let pedido of pedidos" 
-      class="kds-card" 
-      [ngClass]="{'estado-pendiente': pedido.estado === 'Pendiente', 'estado-preparacion': pedido.estado === 'En preparación'}"
-    >
-      <div class="card-header">
-        <span class="pedido-id">#{{ pedido.id }}</span>
-        <span class="pedido-timer"> {{ obtenerMinutosTranscurridos(pedido.creadoEn) }} min</span>
-      </div>
-
-      <div class="card-info">
-        <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
-        <p><strong>Tipo:</strong> <span class="badge-modalidad">{{ pedido.modalidad }}</span></p>
-        <p><strong>Estado:</strong> <span class="badge-estado">{{ pedido.estado }}</span></p>
-      </div>
-
-      <hr />
-
-      <div class="card-items">
-        <h4> Detalle Comanda:</h4>
-        <ul>
-          <li *ngFor="let item of pedido.items">
-            <span class="item-cantidad">{{ item.cantidad }}x</span>
-            <span class="item-nombre">{{ item.nombre }}</span>
-          </li>
-        </ul>
-      </div>
-
-      <div class="card-actions">
-        <button 
-          *ngIf="pedido.estado === 'Pendiente'" 
-          class="btn-accion btn-iniciar" 
-          (click)="cambiarEstado(pedido.id)"
-        >
-           Iniciar Preparación
-        </button>
-
-        <button 
-          *ngIf="pedido.estado === 'En preparación'" 
-          class="btn-accion btn-listo" 
-          (click)="cambiarEstado(pedido.id)"
-        >
-           Marcar como Listo
-        </button>
-      </div>
+  <!-- Métricas rápidas / Resumen de cocina -->
+  <section class="kpis">
+    <div class="kpi-card alerta" [class.activo]="pendientesCount > 0">
+      <span class="kpi-label">Pendientes por preparar</span>
+      <span class="kpi-value">{{ pendientesCount }}</span>
     </div>
-  </div>
+    <div class="kpi-card en-proceso" [class.activo]="enPreparacionCount > 0">
+      <span class="kpi-label">En preparación</span>
+      <span class="kpi-value">{{ enPreparacionCount }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Total en cocina</span>
+      <span class="kpi-value">{{ pedidos.length }}</span>
+    </div>
+  </section>
+
+  <!-- Estados de carga / Vacío -->
+  @if (cargando) {
+    <p class="cargando-texto">Cargando comandas de la cocina...</p>
+  } @else if (pedidos.length === 0) {
+    <div class="panel vacio-panel">
+      <p class="vacio"> No hay comandas pendientes en este momento.</p>
+    </div>
+  } @else {
+    <!-- Grilla de Comandas -->
+    <div class="comandas-grid">
+      @for (pedido of pedidos; track pedido.id) {
+        <article 
+          class="comanda-card"
+          [ngClass]="{
+            'borde-pendiente': pedido.estado === 'Pendiente',
+            'borde-preparacion': pedido.estado === 'En preparación'
+          }"
+        >
+          <div class="card-top">
+            <span class="pedido-numero">#{{ pedido.id }}</span>
+            <span class="timer-tag" [class.urgente]="obtenerMinutosTranscurridos(pedido.creadoEn) >= 15">
+              ⏱ {{ obtenerMinutosTranscurridos(pedido.creadoEn) }} min
+            </span>
+          </div>
+
+          <div class="card-meta">
+            <p class="cliente-nombre"><strong>Cliente:</strong> {{ pedido.cliente }}</p>
+            <div class="badges-row">
+              <span class="badge-modalidad">{{ pedido.modalidad }}</span>
+              <span 
+                class="badge" 
+                [ngClass]="{
+                  'estado-pendiente': pedido.estado === 'Pendiente',
+                  'estado-preparacion': pedido.estado === 'En preparación'
+                }"
+              >
+                {{ pedido.estado }}
+              </span>
+            </div>
+          </div>
+
+          <div class="items-seccion">
+            <p class="items-titulo">Detalle de Productos</p>
+            <ul class="items-lista">
+              @for (item of pedido.items; track item.productoId) {
+                <li>
+                  <span class="item-cantidad">{{ item.cantidad }}x</span>
+                  <span class="item-nombre">{{ item.nombre }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+
+          <div class="card-footer">
+            @if (pedido.estado === 'Pendiente') {
+              <button class="accion-btn btn-iniciar" (click)="cambiarEstado(pedido.id)">
+                Iniciar Preparación
+              </button>
+            } @else if (pedido.estado === 'En preparación') {
+              <button class="accion-btn btn-listo" (click)="cambiarEstado(pedido.id)">
+                ✓ Marcar como Listo
+              </button>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  }
 </div>
