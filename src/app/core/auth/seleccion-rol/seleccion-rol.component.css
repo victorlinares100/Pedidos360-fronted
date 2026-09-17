@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=Inter:wght@400;500;600&display=swap');
+
+:host {
+  --color-bg: #fff3e9;
+  --color-text: #1e1b17;
+  --color-muted: #6b6459;
+  --color-card: #ffffff;
+  --color-border: #f2e3d5;
+  --color-primary: #ff6b2c;
+  --color-primary-dark: #e0551d;
+  --color-primary-soft: #fff0e8;
+
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  font-family: 'Inter', sans-serif;
+}
+
+.seleccion-shell {
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.seleccion-card {
+  max-width: 380px;
+  margin: 0 auto;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 2.25rem 2rem;
+  box-shadow: 0 12px 30px rgba(30, 27, 23, 0.06);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.brand-icon {
+  font-size: 1.3rem;
+}
+
+.brand-name {
+  color: var(--color-text);
+}
+
+h1 {
+  margin: 0 0 0.35rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.subtitle {
+  margin: 0 0 1.75rem;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+/* Lista de roles disponibles */
+.roles-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rol-btn {
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  background: var(--color-card);
+  border: 1.5px solid var(--color-border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease, color 0.15s ease;
+}
+
+.rol-btn:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.rol-btn:active {
+  transform: translateY(0);
+}
+
+.rol-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .seleccion-card {
+    padding: 1.75rem 1.35rem;
+  }
+}

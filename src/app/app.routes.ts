@@ -40,5 +40,11 @@ export const routes: Routes = [
     loadComponent: () => 
       import('./repartidor/repartidor.component').then(m => m.RepartidorComponent),
     canActivate: [rolGuard(['repartidor', 'admin_local', 'admin_general'])]
-  }
+  },
+
+  {
+  path: 'seleccion-rol',
+  loadComponent: () =>
+    import('./core/auth/seleccion-rol/seleccion-rol.component').then(m => m.SeleccionRolComponent)
+},
 ];

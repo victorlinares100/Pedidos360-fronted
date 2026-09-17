@@ -1,0 +1,19 @@
+<div class="seleccion-shell">
+  <div class="seleccion-card">
+    <div class="brand">
+      <span class="brand-icon">🥖</span>
+      <span class="brand-name">Pedidos 360</span>
+    </div>
+
+    <h1>¿Cómo quieres ingresar?</h1>
+    <p class="subtitle">Tu cuenta tiene acceso a varias secciones</p>
+
+    <div class="roles-lista">
+      @for (rol of roles(); track rol) {
+        <button type="button" class="rol-btn" (click)="entrarComo(rol)">
+          {{ etiquetas[rol] ?? rol }}
+        </button>
+      }
+    </div>
+  </div>
+</div>
