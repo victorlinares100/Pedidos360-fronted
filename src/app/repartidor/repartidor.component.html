@@ -1,0 +1,100 @@
+<div class="repartidor-shell">
+  <header class="repartidor-header">
+    <div>
+      <p class="eyebrow">Gestión de Despachos</p>
+      <h1>Panel de Repartidor</h1>
+    </div>
+    <button class="refrescar-btn" type="button" (click)="cargarDespachos()">
+      ↻ Actualizar hoja de ruta
+    </button>
+  </header>
+
+  <!-- Métricas del Repartidor -->
+  <section class="kpis">
+    <div class="kpi-card alerta" [class.activo]="porEntregarCount > 0">
+      <span class="kpi-label">Pendientes de entrega</span>
+      <span class="kpi-value">{{ porEntregarCount }}</span>
+    </div>
+    <div class="kpi-card completados">
+      <span class="kpi-label">Entregados hoy</span>
+      <span class="kpi-value">{{ entregadosCount }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Total en ruta</span>
+      <span class="kpi-value">{{ pedidos.length }}</span>
+    </div>
+  </section>
+
+  <!-- Estados de carga / Vacío -->
+  @if (cargando) {
+    <p class="cargando-texto">Cargando despachos a domicilio...</p>
+  } @else if (pedidos.length === 0) {
+    <div class="panel vacio-panel">
+      <p class="vacio"> No hay entregas pendientes asignadas a domicilio.</p>
+    </div>
+  } @else {
+    <!-- Lista de Tarjetas de Despacho -->
+    <div class="despachos-grid">
+      @for (pedido of pedidos; track pedido.id) {
+        <article 
+          class="despacho-card"
+          [ngClass]="{
+            'borde-listo': pedido.estado === 'Listo',
+            'borde-entregado': pedido.estado === 'Entregado'
+          }"
+        >
+          <div class="card-top">
+            <span class="pedido-numero">#{{ pedido.id }}</span>
+            <span class="timer-tag">
+              ⏱ {{ obtenerMinutosTranscurridos(pedido.creadoEn) }} min
+            </span>
+          </div>
+
+          <div class="card-meta">
+            <p class="cliente-nombre"><strong>Cliente:</strong> {{ pedido.cliente }}</p>
+            <div class="badges-row">
+              <span class="badge-modalidad">🛵 {{ pedido.modalidad }}</span>
+              <span 
+                class="badge" 
+                [ngClass]="{
+                  'estado-listo': pedido.estado === 'Listo',
+                  'estado-entregado': pedido.estado === 'Entregado'
+                }"
+              >
+                {{ pedido.estado }}
+              </span>
+            </div>
+          </div>
+
+          <div class="items-seccion">
+            <p class="items-titulo">Contenido del Pedido</p>
+            <ul class="items-lista">
+              @for (item of pedido.items; track item.productoId) {
+                <li>
+                  <span class="item-cantidad">{{ item.cantidad }}x</span>
+                  <span class="item-nombre">{{ item.nombre }}</span>
+                </li>
+              }
+            </ul>
+            <div class="total-monto">
+              <span>Total a cobrar/validar:</span>
+              <strong>${{ pedido.total | number }}</strong>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            @if (pedido.estado === 'Listo') {
+              <button class="accion-btn btn-entregar" (click)="marcarEntregado(pedido.id)">
+                ✓ Marcar como Entregado
+              </button>
+            } @else if (pedido.estado === 'Entregado') {
+              <div class="completado-badge">
+                 Entrega Finalizada
+              </div>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  }
+</div>

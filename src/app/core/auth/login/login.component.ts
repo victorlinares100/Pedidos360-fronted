@@ -24,7 +24,6 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  // Tu login normal, sin cambios
   onSubmit(): void {
     this.error.set('');
     this.cargando.set(true);
@@ -37,26 +36,29 @@ export class LoginComponent {
         return;
       }
 
-      if (usuario.rol === 'admin_local') {
-        this.router.navigate(['/admin-local']);
-      } else {
-        this.router.navigate(['/']);
+      // Redirección según el rol del usuario autenticado
+      switch (usuario.rol) {
+        case 'admin_local':
+          this.router.navigate(['/admin-local']);
+          break;
+        case 'admin_general':
+          this.router.navigate(['/admin-general']);
+          break;
+        case 'cocina':
+          this.router.navigate(['/cocina']);
+          break;
+        case 'repartidor':
+          this.router.navigate(['/repartidor']);
+          break;
+        case 'cliente':
+        default:
+          this.router.navigate(['/']);
+          break;
       }
-
-      if (usuario.rol === 'admin_local') {
-        this.router.navigate(['/admin-local']);
-      } else if (usuario.rol === 'admin_general') {
-        this.router.navigate(['/admin-general']);
-        } else {
-          
-  this.router.navigate(['/']);
-}
     });
   }
 
-  
-
-  // Login nuevo con Microsoft
+  // Login con Microsoft (Azure AD)
   loginConMicrosoft(): void {
   this.error.set('');
   this.msalService.loginRedirect({
