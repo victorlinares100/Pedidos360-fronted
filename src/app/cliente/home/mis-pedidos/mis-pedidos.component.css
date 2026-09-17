@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+:host {
+  --color-bg: #f7f7f8;
+  --color-text: #1e1b17;
+  --color-muted: #6b6459;
+  --color-card: #ffffff;
+  --color-border: #e7e4de;
+  --color-primary: #ff6b2c;
+
+  display: block;
+  min-height: 100vh;
+  background: var(--color-bg);
+  font-family: 'Inter', sans-serif;
+  color: var(--color-text);
+}
+
+.mis-pedidos-shell {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+h1 {
+  margin: 0 0 2rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.bloque-seccion {
+  margin-bottom: 2.5rem;
+}
+
+.seccion-titulo {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.card-pedido {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.pedido-id {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.pedido-fecha {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.badge-modalidad {
+  background: #f2e3d5;
+  color: #52423a;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.tracker-contenedor {
+  background: #fdfbf7;
+  border: 1px solid var(--color-border);
+  padding: 1.25rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+}
+
+.tracker-pasos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.paso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e7e4de;
+  color: #6b6459;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.paso.completado .dot {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.lbl {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.paso.completado .lbl {
+  color: var(--color-text);
+}
+
+.linea {
+  flex: 1;
+  height: 3px;
+  background: #e7e4de;
+  margin: 0 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.linea.completado {
+  background: var(--color-primary);
+}
+
+.items-lista ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.items-lista li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  padding: 0.3rem 0;
+}
+
+.card-total {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.85rem;
+  font-size: 0.95rem;
+}
+
+.card-total strong {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  color: var(--color-primary);
+}
+
+.historial-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.historial-item {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.historial-info strong {
+  display: block;
+  font-size: 0.95rem;
+}
+
+.historial-fecha {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+
+.badge-completado {
+  background: #d9f2df;
+  color: #227a3c;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.vacio-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  padding: 3rem;
+  text-align: center;
+  border-radius: 16px;
+}
+
+.btn-ir-tienda {
+  display: inline-block;
+  margin-top: 1rem;
+  background: var(--color-primary);
+  color: #ffffff;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+}

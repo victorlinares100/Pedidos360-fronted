@@ -1,0 +1,98 @@
+<div class="mis-pedidos-shell">
+  <header class="page-header">
+    <p class="eyebrow">Área de Cliente</p>
+    <h1>Mis Compras y Seguimiento</h1>
+  </header>
+
+  @if (cargando()) {
+    <p class="cargando-texto">Cargando tus compras...</p>
+  } @else if (pedidos().length === 0) {
+    <div class="vacio-card">
+      <p>Aún no has realizado ningún pedido.</p>
+      <a routerLink="/" class="btn-ir-tienda">Explorar Tiendas</a>
+    </div>
+  } @else {
+    @if (pedidosActivos().length > 0) {
+      <section class="bloque-seccion">
+        <h2 class="seccion-titulo">Pedidos en Curso 🛵</h2>
+        <div class="pedidos-grid">
+          @for (pedido of pedidosActivos(); track pedido.id) {
+            <article class="card-pedido activo">
+              <div class="card-top">
+                <div>
+                  <span class="pedido-id">Pedido #{{ pedido.id }}</span>
+                  <p class="pedido-fecha">{{ pedido.creadoEn | date:'short' }}</p>
+                </div>
+                <span class="badge-modalidad">{{ pedido.modalidad }}</span>
+              </div>
+
+              <div class="tracker-contenedor">
+                <div class="tracker-pasos">
+                  <div class="paso" [class.completado]="obtenerPasoEstado(pedido.estado) >= 1">
+                    <span class="dot">1</span>
+                    <span class="lbl">Recibido</span>
+                  </div>
+                  <div class="linea" [class.completado]="obtenerPasoEstado(pedido.estado) >= 2"></div>
+                  
+                  <div class="paso" [class.completado]="obtenerPasoEstado(pedido.estado) >= 2">
+                    <span class="dot">2</span>
+                    <span class="lbl">Cocina</span>
+                  </div>
+                  <div class="linea" [class.completado]="obtenerPasoEstado(pedido.estado) >= 3"></div>
+
+                  <div class="paso" [class.completado]="obtenerPasoEstado(pedido.estado) >= 3">
+                    <span class="dot">3</span>
+                    <span class="lbl">Listo</span>
+                  </div>
+                  <div class="linea" [class.completado]="obtenerPasoEstado(pedido.estado) >= 4"></div>
+
+                  <div class="paso" [class.completado]="obtenerPasoEstado(pedido.estado) >= 4">
+                    <span class="dot">4</span>
+                    <span class="lbl">Entregado</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="items-lista">
+                <ul>
+                  @for (item of pedido.items; track item.productoId) {
+                    <li>
+                      <span>{{ item.cantidad }}x {{ item.nombre }}</span>
+                      <strong>${{ item.precioUnitario * item.cantidad | number }}</strong>
+                    </li>
+                  }
+                </ul>
+              </div>
+
+              <div class="card-total">
+                <span>Total pagado:</span>
+                <strong>${{ pedido.total | number }}</strong>
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+    }
+
+    @if (historialPedidos().length > 0) {
+      <section class="bloque-seccion">
+        <h2 class="seccion-titulo">Historial de Compras</h2>
+        <div class="historial-lista">
+          @for (pedido of historialPedidos(); track pedido.id) {
+            <article class="historial-item">
+              <div class="historial-info">
+                <strong>Pedido #{{ pedido.id }}</strong>
+                <span class="historial-fecha">{{ pedido.creadoEn | date:'mediumDate' }}</span>
+              </div>
+              <div class="historial-resumen">
+                <span>{{ pedido.items.length }} producto(s)</span>
+                <strong>${{ pedido.total | number }}</strong>
+              </div>
+              <span class="badge-completado">✓ {{ pedido.estado }}</span>
+            </article>
+          }
+        </div>
+      </section>
+    }
+  }
+</div>

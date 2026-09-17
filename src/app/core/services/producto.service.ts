@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Producto } from '../models/producto.model';
+import { ItemPedido } from '../models/pedido.model';
 
 const PRODUCTOS_MOCK: Producto[] = [
   { 
@@ -40,7 +41,7 @@ const PRODUCTOS_MOCK: Producto[] = [
     nombre: 'Focaccia romero', 
     descripcion: 'Con aceite de oliva', 
     precio: 4500, 
-    stock: 8, 
+    stock: 3, 
     disponible: true,
     imagenUrl: 'https://images.unsplash.com/photo-1579697096985-41fe1430e5df?w=500&q=80'
   },
@@ -48,17 +49,67 @@ const PRODUCTOS_MOCK: Producto[] = [
 
 @Injectable({ providedIn: 'root' })
 export class ProductoService {
-  private productos: Producto[] = PRODUCTOS_MOCK;
+  private productosSubject = new BehaviorSubject<Producto[]>(PRODUCTOS_MOCK);
+  public productos$ = this.productosSubject.asObservable();
 
-  // 👇 Cuando exista la API, reemplazar por HttpClient manteniendo la firma
   getProductosPorTienda(tiendaId: number): Observable<Producto[]> {
-    return of(this.productos.filter(p => p.tiendaId === tiendaId)).pipe(delay(300));
+    return this.productos$.pipe(
+      map(productos => productos.filter(p => p.tiendaId === tiendaId))
+    );
   }
 
   toggleDisponibilidad(productoId: number): Producto | undefined {
-    const producto = this.productos.find(p => p.id === productoId);
-    if (!producto) return undefined;
-    producto.disponible = !producto.disponible;
-    return producto;
+    const listaActual = this.productosSubject.getValue();
+    const idx = listaActual.findIndex(p => p.id === productoId);
+    if (idx === -1) return undefined;
+
+    const listaActualizada = [...listaActual];
+    const productoActual = { ...listaActualizada[idx] };
+    productoActual.disponible = !productoActual.disponible;
+    listaActualizada[idx] = productoActual;
+
+    this.productosSubject.next(listaActualizada);
+    return productoActual;
+  }
+
+  actualizarStock(productoId: number, nuevoStock: number): Producto | undefined {
+    const listaActual = this.productosSubject.getValue();
+    const idx = listaActual.findIndex(p => p.id === productoId);
+    if (idx === -1) return undefined;
+
+    const listaActualizada = [...listaActual];
+    const productoActual = { ...listaActualizada[idx] };
+    
+    productoActual.stock = Math.max(0, nuevoStock);
+    productoActual.disponible = productoActual.stock > 0;
+
+    listaActualizada[idx] = productoActual;
+    this.productosSubject.next(listaActualizada);
+    return productoActual;
+  }
+
+  descontarStock(items: ItemPedido[]): void {
+    const listaActual = this.productosSubject.getValue();
+    
+    const listaActualizada = listaActual.map(prod => {
+      const itemComprado = items.find(item => item.productoId === prod.id);
+      if (itemComprado) {
+        const nuevoStock = Math.max(0, prod.stock - itemComprado.cantidad);
+        return {
+          ...prod,
+          stock: nuevoStock,
+          disponible: nuevoStock > 0
+        };
+      }
+      return prod;
+    });
+
+    this.productosSubject.next(listaActualizada);
+  }
+
+  getAlertasStock(tiendaId: number, umbralCritico: number = 5): Observable<Producto[]> {
+    return this.getProductosPorTienda(tiendaId).pipe(
+      map(productos => productos.filter(p => p.stock <= umbralCritico))
+    );
   }
 }

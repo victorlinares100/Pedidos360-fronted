@@ -1,121 +1,138 @@
 <div class="admin-shell">
   <header class="admin-header">
     <div>
-      <p class="eyebrow">Panel Admin Local</p>
+      <p class="eyebrow">Panel de Administración Local</p>
       <h1>{{ nombreTienda }}</h1>
     </div>
     <button class="logout-btn" type="button" (click)="cerrarSesion()">Cerrar sesión</button>
   </header>
 
+  @if (productosStockBajo().length > 0) {
+    <div class="alerta-banner">
+      ⚠️ <strong>Alerta de Inventario:</strong> Hay {{ productosStockBajo().length }} producto(s) con stock crítico (5 o menos unidades).
+    </div>
+  }
+
   <section class="kpis">
     <div class="kpi-card">
-      <span class="kpi-label">Pedidos hoy</span>
-      <span class="kpi-value">{{ pedidosHoy() }}</span>
-    </div>
-    <div class="kpi-card">
-      <span class="kpi-label">Ingresos del día</span>
+      <span class="kpi-label">Ingresos del Día</span>
       <span class="kpi-value">${{ ingresosHoy() | number }}</span>
     </div>
     <div class="kpi-card">
-      <span class="kpi-label">Productos activos</span>
-      <span class="kpi-value">{{ productosActivos() }} / {{ productos().length }}</span>
+      <span class="kpi-label">Pedidos Totales</span>
+      <span class="kpi-value">{{ pedidosHoy() }}</span>
     </div>
-    <div class="kpi-card alerta" [class.activo]="pedidosPendientes() > 0">
-      <span class="kpi-label">Pendientes</span>
+    <div class="kpi-card">
+      <span class="kpi-label">Pendientes por Atender</span>
       <span class="kpi-value">{{ pedidosPendientes() }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Productos Disponibles</span>
+      <span class="kpi-value">{{ productosActivos() }} / {{ productos().length }}</span>
     </div>
   </section>
 
   <nav class="tabs">
-    <button class="tab" [class.activo]="tab() === 'pedidos'" (click)="cambiarTab('pedidos')">
-      Pedidos
-    </button>
-    <button class="tab" [class.activo]="tab() === 'productos'" (click)="cambiarTab('productos')">
-      Productos
-    </button>
+    <button [class.activo]="tab() === 'pedidos'" (click)="cambiarTab('pedidos')">Gestionar Pedidos</button>
+    <button [class.activo]="tab() === 'productos'" (click)="cambiarTab('productos')">Inventario y Productos</button>
+    <button [class.activo]="tab() === 'ventas'" (click)="cambiarTab('ventas')">Historial y Ventas</button>
   </nav>
 
-  @if (cargando()) {
-    <p class="cargando-texto">Cargando datos de la tienda...</p>
-  } @else if (tab() === 'pedidos') {
-    <section class="panel">
-      @if (pedidos().length === 0) {
-        <p class="vacio">Aún no hay pedidos para esta tienda.</p>
-      } @else {
-        <table class="tabla">
-          <thead>
+  @if (tab() === 'pedidos') {
+    <div class="tabla-contenedor">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Modalidad</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (pedido of pedidos(); track pedido.id) {
             <tr>
-              <th>Pedido</th>
-              <th>Cliente</th>
-              <th>Items</th>
-              <th>Total</th>
-              <th>Modalidad</th>
-              <th>Estado</th>
-              <th></th>
+              <td>#{{ pedido.id }}</td>
+              <td>{{ pedido.cliente }}</td>
+              <td>{{ pedido.modalidad }}</td>
+              <td>${{ pedido.total | number }}</td>
+              <td><span class="badge" [ngClass]="claseEstado(pedido.estado)">{{ pedido.estado }}</span></td>
+              <td>
+                @if (siguienteAccion(pedido.estado)) {
+                  <button class="btn-accion" (click)="avanzarPedido(pedido)">
+                    {{ siguienteAccion(pedido.estado) }}
+                  </button>
+                }
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            @for (pedido of pedidos(); track pedido.id) {
-              <tr>
-                <td>#{{ pedido.id }}</td>
-                <td>{{ pedido.cliente }}</td>
-                <td>{{ pedido.items.length }} producto(s)</td>
-                <td>${{ pedido.total | number }}</td>
-                <td>{{ pedido.modalidad }}</td>
-                <td>
-                  <span class="badge" [ngClass]="claseEstado(pedido.estado)">{{ pedido.estado }}</span>
-                </td>
-                <td>
-                  @if (siguienteAccion(pedido.estado); as accion) {
-                    <button class="accion-btn" (click)="avanzarPedido(pedido)">{{ accion }}</button>
-                  }
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      }
-    </section>
-  } @else {
-    <section class="panel">
-      <div class="panel-toolbar">
-        <button class="nuevo-btn" type="button">+ Nuevo producto</button>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (tab() === 'productos') {
+    <div class="tabla-contenedor">
+      <table>
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Stock Actual</th>
+            <th>Disponibilidad</th>
+            <th>Ajustar Stock</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (prod of productos(); track prod.id) {
+            <tr [class.fila-critica]="prod.stock <= umbralStockCritico">
+              <td>
+                <strong>{{ prod.nombre }}</strong>
+                @if (prod.stock <= umbralStockCritico) {
+                  <span class="badge-alerta"> Stock Bajo</span>
+                }
+              </td>
+              <td>${{ prod.precio | number }}</td>
+              <td><strong>{{ prod.stock }} u.</strong></td>
+              <td>
+                <button 
+                  class="btn-toggle" 
+                  [class.disponible]="prod.disponible" 
+                  (click)="toggleDisponible(prod)">
+                  {{ prod.disponible ? 'Disponible' : 'Agotado' }}
+                </button>
+              </td>
+              <td>
+                <div class="stock-control">
+                  <button (click)="modificarStock(prod.id, prod.stock - 1)">-</button>
+                  <span>{{ prod.stock }}</span>
+                  <button (click)="modificarStock(prod.id, prod.stock + 1)">+</button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (tab() === 'ventas') {
+    <div class="ventas-resumen">
+      <h2>Registro Histórico de Ventas</h2>
+      <p>Métricas de pedidos completados y entregados exitosamente.</p>
+      
+      <div class="resumen-grid">
+        <div class="resumen-box">
+          <h3>Ventas Totales</h3>
+          <p class="monto">${{ ingresosHoy() | number }}</p>
+        </div>
+        <div class="resumen-box">
+          <h3>Pedidos Entregados</h3>
+          <p class="monto">{{ pedidosEntregadosCount() }}</p>
+        </div>
       </div>
-      @if (productos().length === 0) {
-        <p class="vacio">Esta tienda aún no tiene productos cargados.</p>
-      } @else {
-        <table class="tabla">
-          <thead>
-            <tr>
-              <th>Producto</th>
-              <th>Descripción</th>
-              <th>Precio</th>
-              <th>Stock</th>
-              <th>Disponible</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (producto of productos(); track producto.id) {
-              <tr>
-                <td>{{ producto.nombre }}</td>
-                <td class="descripcion-col">{{ producto.descripcion }}</td>
-                <td>${{ producto.precio | number }}</td>
-                <td>{{ producto.stock }}</td>
-                <td>
-                  <label class="switch">
-                    <input type="checkbox" [checked]="producto.disponible" (change)="toggleDisponible(producto)" />
-                    <span class="slider"></span>
-                  </label>
-                </td>
-                <td>
-                  <button class="editar-btn" type="button">Editar</button>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      }
-    </section>
+    </div>
   }
 </div>
